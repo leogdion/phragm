@@ -34,7 +34,7 @@ define(['../libs/shared/index', 'store', 'hasher', '../libs/rest/index'], functi
           });
         }
       }
-      return this.data;
+      hasher.setHash('/');
     }
   };
 });

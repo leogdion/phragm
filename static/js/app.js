@@ -1,4 +1,4 @@
-define(['templates', 'zepto', 'crossroads', 'hasher', './controllers/index'], function (templates, $, crossroads, hasher, controllers) {
+define(['templates', 'zepto', 'crossroads', 'hasher', 'store', './controllers/index'], function (templates, $, crossroads, hasher, store, controllers) {
   var app = {};
 
   var controller, main;
@@ -39,6 +39,12 @@ define(['templates', 'zepto', 'crossroads', 'hasher', './controllers/index'], fu
         controller.setup.call(main);
       }
     }
+  });
+
+  crossroads.addRoute('logout', function () {
+    store(false);
+    store.session(false);
+    hasher.setHash('/');
   });
 
   crossroads.addRoute('profile', function () {
@@ -111,7 +117,7 @@ define(['templates', 'zepto', 'crossroads', 'hasher', './controllers/index'], fu
     }
   });
 
-  crossroads.addRoute('confirmation', function () {
+  crossroads.addRoute('confirmation', function (query) {
     if (controller) {
       if (controller.events) {
         for (var selector in controller.events) {
@@ -121,7 +127,42 @@ define(['templates', 'zepto', 'crossroads', 'hasher', './controllers/index'], fu
     }
     controller = controllers.confirmation;
     if (controller.prepare) {
-      controller.prepare.call(main, callback);
+      controller.prepare.call(main, callback, query);
+    } else {
+      callback({});
+    }
+
+    function callback(data) {
+      var div, template;
+      for (var selector in controller.templates) {
+        template = controller.templates[selector];
+        div = $(selector).html(templates[template](data));
+        if (selector === 'main') {
+          main = div;
+        }
+      }
+      if (controller.events) {
+        for (var selector in controller.events) {
+          main.on(controller.events[selector], selector);
+        }
+      }
+      if (controller.setup) {
+        controller.setup.call(main);
+      }
+    }
+  });
+
+  crossroads.addRoute('confirmation{?query}', function (query) {
+    if (controller) {
+      if (controller.events) {
+        for (var selector in controller.events) {
+          main.off(controller.events[selector], selector);
+        }
+      }
+    }
+    controller = controllers.confirmation;
+    if (controller.prepare) {
+      controller.prepare.call(main, callback, query);
     } else {
       callback({});
     }

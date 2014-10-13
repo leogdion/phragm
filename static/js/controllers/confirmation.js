@@ -150,11 +150,14 @@ define(['zepto', 'hasher', 'store', 'smoke', '../libs/validation/index', '../lib
 
       }
     },
-    prepare: function (cb) {
+    prepare: function (cb, query) {
       var data = {
         registration: shared.get('registration')
       };
       console.log(data);
+      if (query && query.secret) {
+        this.find('#secret').val(data.secret);
+      }
       this.find('#key').val(data.key);
       this.find('#name').val(data.name);
       this.find('#email').val(data.email);
