@@ -19,8 +19,9 @@ define(['store', 'hasher', '../libs/rest/index'], function (store, hasher, rest)
             cb({});
           }
         });
+      } else {
+        cb({});
       }
-      cb({});
     }
   };
 });
