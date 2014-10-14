@@ -51,7 +51,8 @@ module.exports = function () {
         cb();
       }
       Object.keys(data).forEach(function (name) {
-        templates[name] = _.template(data[name]);
+        var value = Array.isArray(data[name]) ? data[name].join("\n") : data[name];
+        templates[name] = _.template(value);
       });
       cb(undefined, datatemplate(templates));
     }

@@ -151,17 +151,22 @@ define(['zepto', 'hasher', 'store', 'smoke', '../libs/validation/index', '../lib
       }
     },
     prepare: function (cb, query) {
+      //debugger;
       var data = {
-        registration: shared.get('registration')
+        registration: shared.get('registration'),
+        secret: query && query.secret
       };
+/*
+      data.secret = query && query.secret;
       console.log(data);
       if (query && query.secret) {
-        this.find('#secret').val(data.secret);
+        this.find('#secret').val(query.secret);
       }
-      this.find('#key').val(data.key);
-      this.find('#name').val(data.name);
-      this.find('#email').val(data.email);
-      this.find('#password').val(data.password);
+      this.find('#key').val(data.registration.key);
+      this.find('#name').val(data.registration.name);
+      this.find('#email').val(data.registration.email);
+      this.find('#password').val(data.registration.password);
+      */
       cb(data);
     }
   };
