@@ -17,6 +17,7 @@ module.exports = function (include) {
           res.send('show');
         },
         create: function (req, res) {
+
           var data = {
             email: req.body.email,
             secret: new Buffer(uuid.parse(uuid.v4())),
@@ -41,7 +42,8 @@ module.exports = function (include) {
               db.registration.create(data).success(function (registration) {
                 emailer.queue('confirmation', {
                   email: data.email,
-                  secret: data.secret.toString('base64')
+                  secret: data.secret.toString('base64'),
+                  httpHeaders: req.headers
                 }, function (error, response) {
                   if (error) {
                     res.status(400).send(error);

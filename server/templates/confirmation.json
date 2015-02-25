@@ -1,6 +1,21 @@
 {
   "From": "phragm@brightdigit.com", 
   "To": "<%= email %>",
-  "TextBody": "<%= secret %>",
-  "Subject" : "Please confirm phragm account"
+  "TextBody": [
+    "Thank you for registering for a phragm account.",
+    "",
+    "To confirm your account, please go here:",
+    "http://<%= httpHeaders.host %>/#confirmation?secret=<%= secret %>",
+    "",
+    "If that doesn't work go to the confirmation page and enter your",
+    "confirmation code:",
+    "<%= secret %>",
+    "",
+    "We hope you enjoy using phragm!",
+    "",
+    "Sincerely,",
+    "The phragm Team",
+    "support@phragm.com"
+  ],
+  "Subject" : "phrahm - confirm registration"
 }

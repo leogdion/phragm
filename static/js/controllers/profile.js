@@ -32,9 +32,10 @@ define(['../libs/shared/index', 'store', 'hasher', '../libs/rest/index'], functi
               hasher.setHash('/');
             }
           });
+        } else {
+          hasher.setHash('/');
         }
       }
-      return this.data;
     }
   };
 });
