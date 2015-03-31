@@ -1,3 +1,1 @@
-require(['app'], function (app) {
-  //$('main').append('Hello World');
-});
+var test = require('./test.js')
