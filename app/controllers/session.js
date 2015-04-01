@@ -66,6 +66,92 @@ module.exports = function (include) {
          *     }
          */
         create: function(req, res) {
+          function findUser(requestBody) {
+            function _(requestBody, cb) {
+              User.findByLogin(requestBody.name, requestBody.password, cb.bind(undefined, undefined));
+            }
+
+            return _.bind(undefined, requestBody);
+          }
+
+          function findApp(requestBody) {
+            function _(requestBody, cb) {
+              App.findByKey(requestBody.apiKey).success(cb.bind(undefined, undefined));
+            }
+
+            return _.bind(undefined, requestBody);
+          }
+
+          function findDevice(request) {
+            function _(request, cb) {
+              Device.findByKey(request.body.deviceKey, request.headers['user-agent'], cb.bind(undefined, undefined));
+            }
+
+            return _.bind(undefined, request);
+          }
+
+          function beginSession(device, app, user, request, response) {
+            console.log(request.connection.remoteAddress);
+            Session.create({
+              key: crypto.randomBytes(48),
+              clientIpAddress:  '129.89.23.1'//request.headers['x-forwarded-for'] || request.connection.remoteAddress
+            }).then(function (session) {
+              //console.log("TEST$!");
+              console.log(session.dataValues);
+              //console.log(arguments);
+              //var chainer = new QueryChainer();
+              async.map([
+                [session.setDevice, device],
+                [session.setApp, app],
+                [session.setUser, user],
+              ], function (spec, cb) {
+                console.log('test');
+                spec[0].call(session, spec[1]).then(function (result){
+                  cb(null, spec[1]);
+                });
+              }, function (err, results) {
+                //console.log(err);
+                //console.log(results);
+                if (err) {
+                  res.status(500).send(err);
+                } else {
+                  res.send({
+                
+                  //response.status(201).send({
+                    sessionKey: session.key.toString('base64'),
+                    deviceKey: device.key.toString('base64'),
+                    user: {
+                      name: user.name,
+                      email: user.email
+                    }
+                  });
+                }
+              });
+            }).catch(function (error) {
+              console.log(error);
+            });
+          }
+
+          async.parallel({
+            user: findUser(req.body),
+            app: findApp(req.body),
+            device: findDevice(req)
+          }, function (error, result) {
+            if (!result.user) {
+              res.status(400).send({
+                status: 401,
+                message: "Unknown username or password."
+              });
+            } else if (!result.app) {
+              console.log('error missing app');
+              res.status(400).send({
+                status: 400,
+                message: "Unknown application key."
+              });
+            } else {
+              beginSession(result.device, result.app, result.user, req);
+            }
+          });
         },
         update: function (req, res) {
           // find the 
