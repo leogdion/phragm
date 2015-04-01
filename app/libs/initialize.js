@@ -1,7 +1,5 @@
 var lodash = require('lodash');
 var db = require('./sequelize');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
 var async = require('async');
 var crypto =require('crypto');
 module.exports = function (app) {
@@ -24,7 +22,7 @@ module.exports = function (app) {
     Device = db.device,
     Session = db.session,
     UserAgent = db.userAgent,
-    Sequelize = db.Sequelize;
+    Sequelize = db.Sequelize;/*
         passport.use(new LocalStrategy({
     usernameField: 'name', passReqToCallback: true}, function (req, user, password, done) {
           function findUser(requestBody) {
@@ -126,17 +124,9 @@ module.exports = function (app) {
             done(null, session);
           });
         }); 
+*/
           var pw = crypto.randomBytes(8).toString('base64');
           console.log(pw);
-          /*
-          db.user.newLogin({
-            'name': 'leo-dion',
-            'password': pw,
-            'email': 'test+leo@brightdigit.com'
-          }).success(
-
-          function (user) {
-          */
             db.app.createByName('default', 'yaCCeDCruL/8ccbFz57sQZiDiu7FVzQfjkMirvSTMBWg19z5Hu8OqYww/2Q/Y3r/').then(
 
             function (hostApp) {

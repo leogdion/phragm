@@ -3,8 +3,6 @@ var bodyParser = require('body-parser');
 var roust = require('../roust');
 var app = express();
 var configuration = require('./configuration');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
 
 var initialize = require('./libs/initialize');
 
@@ -16,8 +14,6 @@ app.use(function (req, res, next) {
   }, 1000);
 });
 
-app.use(passport.initialize());
-app.use(passport.session());
 // parse application/json
 app.use(bodyParser.json());
 app.use(function(req, res, next) {

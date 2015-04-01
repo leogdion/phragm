@@ -10,7 +10,6 @@ var User = db.user,
     UserAgent = db.userAgent,
     Sequelize = db.Sequelize;
 
-var passport = require('passport');
 module.exports = function (include) {
   return {
     sessions: {
@@ -66,18 +65,7 @@ module.exports = function (include) {
          *       "error": "UnknownApiKey"
          *     }
          */
-        create: function(req, res, next) {
-            passport.authenticate('local', function(err, user, info) {
-              console.log(err);
-              console.log(user);
-              console.log(info);
-              if (user === false) {
-                res.status(info.status).send(info.message);
-              } else {
-                console.log(req);
-                res.send(user);
-              }
-            })(req, res, next);
+        create: function(req, res) {
         },
         update: function (req, res) {
           // find the 

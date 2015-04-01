@@ -48,7 +48,7 @@ ready(function () {
   });
 
   var confirmation = document.getElementById("confirmation");
-  var secret = localStorage.getItem("registration-secret");
+  secret = localStorage.getItem("registration-secret");
   var key = localStorage.getItem("registration-key");
   if (secret) {
     confirmation.querySelectorAll('[name="secret"]')[0].setAttribute('value', secret);

@@ -1,6 +1,6 @@
 {
   "name": "phragm",
-  "version": "0.1.804",
+  "version": "0.1.808",
   "prerelease": "alpha",
   "description": "sample project",
   "main": "server",
@@ -71,8 +71,6 @@
     "lodash": "^2.4.1",
     "node-sass": "^2.0.1",
     "node-uuid": "^1.4.2",
-    "passport": "^0.2.1",
-    "passport-local": "^1.0.0",
     "pg": "^3.6.3",
     "pg-hstore": "^2.3.1",
     "pg.js": "^3.6.2",

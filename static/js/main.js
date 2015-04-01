@@ -1,1 +1,1 @@
-var test = require('./test.js')
+var test = require('./test.js');
