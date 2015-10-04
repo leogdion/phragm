@@ -10,6 +10,7 @@ var dirname = reponame + ".git";
 var fulldirpath = path.join(__dirname, "repos", dirname);
 
 var npm = require("npm");
+var execFile = require('child_process').execFile;
 
 function walk(currentDirPath, callback) {
   var fs = require('fs'),
@@ -82,9 +83,6 @@ function updateSubmodules(localPath, repository, cb) {
 
 function npmInstall(localPath, repository, cb) {
   console.log("loading npm...");
-  console.log(localPath);
-  console.log(repository);
-  console.log(cb);
   npm.load({
     "prefix": localPath
   }, function (error) {
@@ -115,9 +113,17 @@ ensureExists(path.join(__dirname, "repos"), function () {
           if (error) {
             console.log(error);
           } else {
-            var gulp = require('./beginkit/gulpfile.js');
-            process.chdir('./beginkit/');
-            gulp.start(["default"]);
+            execFile(
+              path.join(workingDirPath, "node_modules/gulp/bin/gulp.js"), [], {
+                "cwd" : workingDirPath
+              }, function (error, stdout, stderr) {
+                console.log(stdout);
+                console.log(error);
+              });
+
+            //var gulp = require('./beginkit/gulpfile.js');
+            //process.chdir('./beginkit/');
+            //gulp.start(["default"]);
           }
         });
 
@@ -131,5 +137,4 @@ ensureExists(path.join(__dirname, "repos"), function () {
       console.log(reasonForFailure);
     });
   });
-  console.log("test2");
 });
