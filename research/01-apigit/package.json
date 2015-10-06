@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^1.4.2",
+    "aws-sdk": "^2.2.6",
     "cron": "^1.0.9",
     "express": "^4.13.3",
     "gulp": "^3.9.0",
