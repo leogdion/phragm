@@ -2,14 +2,15 @@ var express = require('express');
 var app = express();
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize('database', 'username', 'password', {
-  dialect: 'sqlite'
+  dialect: 'sqlite',
+  logging: null
 });
-
-
+var setup = require('./setup');
+var async = require('async');
 var uuid = require('node-uuid');
 
 var Site = sequelize.define('Site', {
-  siteId: {type : Sequelize.STRING, unique: true}
+  siteId: {type : Sequelize.UUID, unique: true, allowNull: false, defaultValue: Sequelize.UUIDV4}
 });
 
 var Status = sequelize.define('SiteStatus', {
@@ -19,19 +20,16 @@ var Status = sequelize.define('SiteStatus', {
 Site.belongsTo(Status);
 
 app.get('/', function (req, res) {
-  Status.findOne({
-    'name' : 'queued'
-  }).then( function (status) {
-    Site.create({
-      siteId : uuid.v4(),
-      status : status
+  Status.findOne({where: {
+              'name' : "queued"
+    }}).then( function (status) {
+    var site  = Site.create({
     }).then(function (site) {
-
-    console.log(site);
-    site.setStatus(status).then(function (site) {
+    site.setSiteStatus(status).then(function (site) {
       res.send(site);
     });
     });
+    
   });
 });
 
@@ -39,7 +37,8 @@ sequelize.sync({force: true}).then(function () {
   Status.bulkCreate([
     { name : "queued"},
     { name : "building"},
-    { name : "ready"}
+    { name : "ready"},
+    { name : "error"}
   ]).then(function () {
 
     var server = app.listen(3000, function () {
@@ -58,6 +57,31 @@ sequelize.sync({force: true}).then(function () {
          * at 11:30:00 AM. It does not run on Saturday
          * or Sunday.
          */
+         Site.findAll({
+          include: [{
+            model: Status,
+            where: {
+              'name' : "queued"
+            }
+          }]
+         }).then(function (sites) {
+          Status.findOne({where: {
+              'name' : "building"
+            }}).then( function (status) {
+              async.each(sites, function (site, cb) {
+            
+              site.setSiteStatus(status).then( function () {
+                setup(site.siteId, cb);
+              });
+              
+            });
+          }, function (error) {
+            console.log(error);
+            if (error) {
+              process.exit(1);
+            }
+          });
+         });
       },
       start: false
     });
