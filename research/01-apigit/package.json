@@ -18,6 +18,7 @@
     "node-uuid": "^1.4.3",
     "nodegit": "^0.5.0",
     "npm": "^3.3.5",
+    "orchestrator": "^0.3.7",
     "sequelize": "^2.0.0-rc1",
     "sqlite3": "^3.1.0"
   }
