@@ -1,42 +1,51 @@
+var Orchestrator = require('orchestrator');
 var NodeGit = require("nodegit");
 var path = require("path");
 var fs = require("fs");
 var os = require("os");
 var async = require("async");
+var walk = require("./walk");
 
 module.exports = function(reponame, cb) {
+  var orchestrator = new Orchestrator();
+  orchestrator.on('task_start', function (e) {
+    // e.message is the log message
+    // e.task is the task name if the message applies to a task else `undefined`
+    // e.err is the error if event is 'err' else `undefined`
+    console.log(e);
+  });
+  // for task_end and task_err:
+  orchestrator.on('task_stop', function (e) {
+    // e is the same object from task_start
+    // e.message is updated to show how the task ended
+    // e.duration is the task run duration (in seconds)
+  });
+  var add = orchestrator.add.bind(orchestrator);
+  var settings = {
+    name : reponame,
+    repoRoot: path.join(__dirname, "repos")
+  };
+  var startArgs = [];
+  fs.readdir("./tasks", function (error, files) {
+    console.log(files);
+    async.each(files, function (file, cb) {
+      require(path.join(__dirname,"tasks",file))(settings)(add, startArgs);
+      cb();
+    }, function (error) {
+      startArgs.push(function (error) {
+        console.log(error);
+      });
+      orchestrator.start.apply(orchestrator, startArgs);
+    });
+  });
+  /*
   var dirname = reponame + ".git";
   var fulldirpath = path.join(__dirname, "repos", dirname);
 
   var npm = require("npm");
   var execFile = require('child_process').execFile;
 
-  function walk(currentDirPath, callback) {
-    var fs = require('fs'),
-        path = require('path');
-    fs.readdirSync(currentDirPath).forEach(function (name) {
-      var filePath = path.join(currentDirPath, name);
-      var stat = fs.statSync(filePath);
-      if (stat.isFile()) {
-        callback(filePath, stat);
-      } else if (stat.isDirectory()) {
-        walk(filePath, callback);
-      }
-    });
-  }
-
-  function ensureExists(path, mask, cb) {
-    if (typeof mask == 'function') { // allow the `mask` parameter to be optional
-      cb = mask;
-      mask = 0777;
-    }
-    fs.mkdir(path, mask, function (err) {
-      if (err) {
-        if (err.code == 'EEXIST') cb(null); // ignore the error if the folder already exists
-        else cb(err); // something else went wrong
-      } else cb(null); // successfully created folder
-    });
-  }
+  
 
   function updateSubmodules(localPath, repository, cb) {
     console.log("updating submodules...");
@@ -140,4 +149,5 @@ module.exports = function(reponame, cb) {
       });
     });
   });
+*/
 };

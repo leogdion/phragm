@@ -1,8 +1,18 @@
-// Load the AWS SDK for Node.js
-var uuid = require('node-uuid');
+
 var AWS = require('aws-sdk');
 var config = require('./phragm-admin.aws.json');
 AWS.config.loadFromPath('./phragm-admin.aws.json');
+
+
+module.exports = function (settings) {
+  var s3bucket = new AWS.S3({ params: {Bucket: settings.name + ".phragm.com"}});
+  return function (add, args) {
+    add('createbucket', function (cb) {
+      s3bucket.createBucket(cb);
+    });
+  }
+};
+
 /**
  * Don't hard-code your credentials!
  * Export the following environment variables instead:
