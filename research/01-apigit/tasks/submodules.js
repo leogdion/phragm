@@ -11,8 +11,7 @@ module.exports = function (settings) {
   
   return function (add, args) {
     add('submodules', ['gitwork'], function (cb) {
-      console.log("updating submodules...");console.log(settings);
-  var repository =settings.repo;
+      var repository =settings.repo;
       Ini = require('ini');
       var config = Ini.parse(fs.readFileSync(path.normalize(workingDirPath + '/.gitmodules'), 'utf-8'));
       //if startswith submodule, push into modules
@@ -24,30 +23,23 @@ module.exports = function (settings) {
       }
       async.each(modules, function (module, cb) {
         var modulePath = module.path;
-        console.log("setting up submodule \"" + modulePath + "\"...");
-        console.log(repository);
         NodeGit.Submodule.lookup(repository, modulePath).
         catch (function (error) {
-          console.log(error);
         }).then(function (submodule) {
           // Use submodule
           try {
-            console.log("init submodule \"" + modulePath + "\"...");
             submodule.init(1);
           } catch (e) {
             cb(e)
           }
           try {
-            console.log("update submodule \"" + modulePath + "\"...");
             submodule.update(1, new NodeGit.CheckoutOptions);
           } catch (e) {
             cb(e);
           }
-          console.log("completed setup for submodule \"" + modulePath + "\"...");
           cb();
         });
       }, function (error) {
-        console.log("completed setup for submodules");
         cb(error);
       });
     });

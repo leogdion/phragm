@@ -19,6 +19,7 @@ module.exports = function(reponame, cb) {
     // e is the same object from task_start
     // e.message is updated to show how the task ended
     // e.duration is the task run duration (in seconds)
+    console.log(e);
   });
   var add = orchestrator.add.bind(orchestrator);
   var settings = {

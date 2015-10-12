@@ -9,9 +9,9 @@ module.exports = function (settings) {
   var workingDirPath = path.join(os.tmpdir(), settings.name);
         
   return function (add, args) {
-    add('gulp', ['npm', 'submodules'], function (cb) {
+    add('gulp', ['npm', 'submodules', 'bucketpolicy'], function (cb) {
       execFile(
-        path.join(workingDirPath, "node_modules/gulp/bin/gulp.js"), [], {
+        path.join(workingDirPath, "node_modules/gulp/bin/gulp.js"), ["publish"], {
         "cwd" : workingDirPath
       }, function (error, stdout, stderr) {
         console.log(stdout);

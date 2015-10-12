@@ -11,14 +11,14 @@ module.exports = function (settings) {
         
   return function (add, args) {
     add('npm', ['gitwork'], function (cb) {
-      console.log("loading npm...");
       npm.load({
         "prefix": workingDirPath
       }, function (error) {
-        console.log("installing node dependencies...");
         if (error) {
           cb(error);
         } else {
+          npm.registry.log.on("log", function (message) {  
+          });
           npm.commands.install([workingDirPath], function (error, data) {
             cb(error);
           });
