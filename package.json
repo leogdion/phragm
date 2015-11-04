@@ -1,6 +1,6 @@
 {
   "name": "phragm",
-  "version": "1.9.612",
+  "version": "1.9.643",
   "description": "template for s3 aws / heroku app",
   "main": "app/index.js",
   "scripts": {
@@ -54,7 +54,8 @@
     "gulp-substituter": "^0.3.0",
     "gulp-uglify": "^1.2.0",
     "gulp-uglifycss": "^1.0.4",
-    "gulp-umd": "^0.2.0",
+    "gulp-umd": "https://github.com/WHenderson/gulp-umd.git",
+    "gulp-util": "^3.0.7",
     "gulp-wrap": "^0.11.0",
     "handlebars": "^3.0.3",
     "handlebars-intl": "^1.1.1",

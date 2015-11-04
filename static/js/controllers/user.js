@@ -122,10 +122,10 @@ var User = (function () {
     initialize: function (app) {
       this.app = app;
       this.app.hash("", this);
-      self.elements.setup(this);
+      //self.elements.setup(this);
     },
     hash: function (route) {
-
+      self.elements.setup(this);
     },
     element: function (name, newElement) {
       if (newElement) {
@@ -516,5 +516,6 @@ var User = (function () {
   */
   };
 
+  //App.controller(constructor);
   return constructor;
 })();
