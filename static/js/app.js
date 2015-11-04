@@ -1,4 +1,5 @@
-var User = require('./controllers/user.js');
+var User = require('./controllers/user');
+var crossroads = require('crossroads');
 
 function isFunction(functionToCheck) {
   var getType = {};
@@ -19,9 +20,10 @@ var App = {
     else window.addEventListener('load', cb);
 
   },
-  hashListeners: [],
-  hashChange: function (controller) {
-    this.hashListeners.push(controller);
+  hash: function (route, controller) {
+    if (controller) {
+      crossroads.addRoute(route, controller.hash.bind(controller, route));
+    }
   },
   configuration: {},
   start: function () {
@@ -34,20 +36,6 @@ var App = {
         App.configuration = JSON.parse(configurationElement.innerText.trim()) || this.configuration;
       }
       user.initialize(App);
-      for (var i = 0, len = App.hashListeners.length; i < len; i++) {
-        var func = isFunction(App.hashListeners[i].hashChange);
-        if (func && App.hashListeners[i].hashChange(evt)) {
-          return;
-        }
-      }
-    });
-    window.addEventListener('hashChange', function (evt) {
-      for (var i = 0, len = App.hashListeners.length; i < len; i++) {
-        var func = isFunction(App.hashListeners[i].hashChange);
-        if (func && App.hashListeners[i].hashChange(evt)) {
-          return;
-        }
-      }
     });
   }
 };

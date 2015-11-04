@@ -1,5 +1,5 @@
 var Spinner = require('spin.js');
-var modal = require("../libs/modal");
+var querystring = require("../libs/querystring");
 var templates = require('../templates');
 
 var User = (function () {
@@ -121,7 +121,11 @@ var User = (function () {
   constructor.prototype = {
     initialize: function (app) {
       this.app = app;
+      this.app.hash("", this);
       self.elements.setup(this);
+    },
+    hash: function (route) {
+
     },
     element: function (name, newElement) {
       if (newElement) {
@@ -134,6 +138,52 @@ var User = (function () {
       "form": {
         "selector": function () {
           return document.getElementById("user-registration");
+        },
+        "events": {
+          "submit": function (evt) {
+            var that = this;
+            var inputs = that.element("inputs");
+            var data = inputs.reduce(function (memo, element) {
+              var key = element.getAttribute('name') || element.getAttribute('id');
+              var value = element.value || (element.selectedIndex && element.options && element.options[element.selectedIndex]);
+              var ignore = element.hasAttribute('data-ignore');
+              if (key && value && !ignore) {
+                memo[key] = value;
+              }
+              return memo;
+            }, {});
+            var request = new XMLHttpRequest();
+            request.open('POST', this.app.configuration.server + '/api/v1/users', true);
+            request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+            request.onload = function () {
+              var i = 0;
+              if (this.status >= 200 && this.status < 400) {
+                // Success!
+                var resp = this.response;
+                for (i = 0, len = inputs.length; i < len; i++) {
+                  inputs[i].disabled = false;
+                }
+                that.app.hash("activation?" + querystring(JSON.parse(resp)));
+              } else {
+                for (i = 0, len = inputs.length; i < len; i++) {
+                  inputs[i].disabled = false;
+                }
+              }
+            };
+            request.onerror = function () {
+              // There was a connection error of some sort
+              for (var i = 0, len = inputs.length; i < len; i++) {
+                inputs[i].disabled = false;
+              }
+            };
+            request.send(JSON.stringify(data));
+
+
+            for (var i = 0, len = inputs.length; i < len; i++) {
+              inputs[i].disabled = true;
+            }
+            evt.preventDefault();
+          }
         }
       },
       "submit-button": {
@@ -142,11 +192,6 @@ var User = (function () {
           return Array.prototype.slice.call(baseElement.getElementsByTagName("button")).filter(function (btn) {
             return btn.type == "submit";
           })[0];
-        },
-        "events": {
-          "click": function (evt) {
-
-          }
         }
       },
       "inputs": {
