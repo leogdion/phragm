@@ -66,6 +66,62 @@ var Activation = (function () {
           main.innerHTML = templates.activation(data);
 
           return main.firstChild;
+        },
+        "events": {
+          "submit": function (evt) {
+            var inputs = this.element("inputs");
+            var data = inputs.reduce(function (memo, element) {
+              var key = element.getAttribute('name') || element.getAttribute('id');
+              var value = element.value || (element.selectedIndex && element.options && element.options[element.selectedIndex]);
+              var ignore = element.hasAttribute('data-ignore');
+              if (key && value && !ignore) {
+                memo[key] = value;
+              }
+              return memo;
+            }, {});
+            var request = new XMLHttpRequest();
+            request.open('PUT', this.app.configuration.server + '/api/v1/users/' + data.name, true);
+            delete data.name;
+            request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+            request.onload = function () {
+              var i = 0;
+
+              for (i = 0, len = inputs.length; i < len; i++) {
+                inputs[i].disabled = false;
+              }
+              if (this.status >= 200 && this.status < 400) {
+                // Success!
+                var resp = this.response;
+              } else {
+
+                modal(this.response);
+              }
+            };
+
+            request.onerror = function () {
+              // There was a connection error of some sort
+              for (var i = 0, len = inputs.length; i < len; i++) {
+                inputs[i].disabled = false;
+              }
+            };
+            request.send(JSON.stringify(data));
+
+            for (var i = 0, len = inputs.length; i < len; i++) {
+              inputs[i].disabled = true;
+            }
+            evt.preventDefault();
+          }
+        }
+      },
+      "inputs": {
+        "baseElement": "form",
+        "selector": function (baseElement) {
+          return ["input", "select", "textarea", "button"].reduce(
+
+          function (memo, tagName) {
+            memo = memo.concat(Array.prototype.slice.call(baseElement.getElementsByTagName(tagName)));
+            return memo;
+          }, []);
         }
       }
     }
