@@ -108,6 +108,10 @@ var User = (function () {
 
           if (element) {
             self.elements.items[name] = element;
+            var events = that.elements[name].events;
+            for (var eventName in events) {
+              element.addEventListener(eventName, events[eventName].bind(that));
+            }
           }
         }
       }
@@ -145,6 +149,17 @@ var User = (function () {
           }
         }
       },
+      "inputs": {
+        "baseElement": "form",
+        "selector": function (baseElement) {
+          return ["input", "select", "textarea", "button"].reduce(
+
+          function (memo, tagName) {
+            memo = memo.concat(Array.prototype.slice.call(baseElement.getElementsByTagName(tagName)));
+            return memo;
+          }, []);
+        }
+      },
       "test-button": {
         "baseElement": "form",
         "selector": function () {
@@ -164,16 +179,17 @@ var User = (function () {
               password: "testTEST123!",
               "confirm-password": "testTEST123!"
             };
+            var inputs = this.element("inputs");
             var inputEvt;
             for (var i = 0, len = inputs.length; i < len; i++) {
               var name = inputs[i].getAttribute('name');
               var value = name && data[name];
               if (value) {
-                inputEvt = document.createEvent('HTMLEvents');
-                inputEvt.initEvent('blur', true, false);
+                //inputEvt = document.createEvent('HTMLEvents');
+                //inputEvt.initEvent('blur', true, false);
                 inputs[i].value = value;
-                inputs[i].dispatchEvent(inputEvt);
-                inputs[i].setCustomValidity("");
+                //inputs[i].dispatchEvent(inputEvt);
+                //inputs[i].setCustomValidity("");
               }
             }
           }
