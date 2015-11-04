@@ -7,6 +7,7 @@ var User = (function () {
 
   };
 
+/*
   function closest(elem, selector) {
 
     var matchesSelector = elem.matches || elem.webkitMatchesSelector || elem.mozMatchesSelector || elem.msMatchesSelector;
@@ -81,8 +82,105 @@ var User = (function () {
         results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
   }
+*/
+  var self = {
+    elements: {
+      items: {
+
+      },
+      setup: function (that) {
+        for (var name in that.elements) {
+          var selector = that.elements[name].selector;
+          var baseElement = that.elements[name].baseElement;
+
+          if (typeof(baseElement) == "string") {
+            baseElement = self.elements.items[baseElement];
+          }
+
+          if (!baseElement) {
+            baseElement = document;
+          }
+
+          var element;
+          if (typeof(selector) == "function") {
+            element = that.elements[name].selector.call(that, baseElement);
+          }
+
+          if (element) {
+            self.elements.items[name] = element;
+          }
+        }
+      }
+    }
+  };
 
   constructor.prototype = {
+    initialize: function (app) {
+      this.app = app;
+      self.elements.setup(this);
+    },
+    element: function (name, newElement) {
+      if (newElement) {
+        self.elements.items[name] = newElement;
+      } else {
+        return self.elements.items[name];
+      }
+    },
+    elements: {
+      "form": {
+        "selector": function () {
+          return document.getElementById("user-registration");
+        }
+      },
+      "submit-button": {
+        "baseElement": "form",
+        "selector": function (baseElement) {
+          return Array.prototype.slice.call(baseElement.getElementsByTagName("button")).filter(function (btn) {
+            return btn.type == "submit";
+          })[0];
+        },
+        "events": {
+          "click": function (evt) {
+
+          }
+        }
+      },
+      "test-button": {
+        "baseElement": "form",
+        "selector": function () {
+          if (this.app.configuration.debug) {
+            var btnParent = document.createElement('div');
+            btnParent.innerHTML = "<button class=\"test\" type=\"button\">Test</button>";
+            return this.element("submit-button").parentNode.insertBefore(btnParent.firstChild, this.element("submit-button"));
+          }
+        },
+        "events": {
+          "click": function (evt) {
+            var faker = require('faker');
+            var username = faker.fake('{{name.firstName}}{{name.lastName}}').toLowerCase().substring(0, 14);
+            var data = {
+              name: username,
+              email: "test+" + username + "@brightdigit.com",
+              password: "testTEST123!",
+              "confirm-password": "testTEST123!"
+            };
+            var inputEvt;
+            for (var i = 0, len = inputs.length; i < len; i++) {
+              var name = inputs[i].getAttribute('name');
+              var value = name && data[name];
+              if (value) {
+                inputEvt = document.createEvent('HTMLEvents');
+                inputEvt.initEvent('blur', true, false);
+                inputs[i].value = value;
+                inputs[i].dispatchEvent(inputEvt);
+                inputs[i].setCustomValidity("");
+              }
+            }
+          }
+        }
+      }
+    }
+/*
     changeActivation: function (data, done) {
       var transitionEvent = whichTransitionEvent();
       if (transitionEvent && done && done.apply) {
@@ -130,11 +228,7 @@ var User = (function () {
 
             videoBg.removeChild(spinner.el);
             //activationForm.classList.add('fade');
-/*controller.changeActivation(JSON.parse(resp), function () {
 
-              videoBg.removeChild(spinner.el);
-              });
-*/
           } else {
             // We reached our target server, but it returned an error
             //vex.dialog.alert('Thanks for checking out Vex!');
@@ -358,6 +452,7 @@ var User = (function () {
 
       });
     }
+  */
   };
 
   return constructor;
