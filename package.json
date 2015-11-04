@@ -1,6 +1,6 @@
 {
-  "name": "beginkit",
-  "version": "1.9.571",
+  "name": "phragm",
+  "version": "1.9.579",
   "description": "template for s3 aws / heroku app",
   "main": "app/index.js",
   "scripts": {

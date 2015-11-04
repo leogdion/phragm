@@ -159,7 +159,7 @@ html, body {
       min-height: 40vh;
       height: 40vh;
       max-height: 60vh;
-      transition: opacity 500ms;
+      transition: opacity 100ms;
       &.half.fade {
         opacity: 0.5;
       }
@@ -214,7 +214,7 @@ html, body {
           opacity: 0;
           @include border-radius(5px);
           border: 1px solid rgba(0,0,0,0.3);
-          transition: opacity 500ms linear;
+          transition: opacity 100ms linear;
           z-index: 1000;
           &.active {
             opacity: 1.0;
@@ -237,7 +237,7 @@ html, body {
           &[type="submit"] {
             background-color: $submit-button-bg-color;
             color: #FFF;
-            transition: background-color 500ms linear, opacity 500ms linear;
+            transition: background-color 100ms linear, opacity 100ms linear;
           }
           &:disabled {
             opacity: 0.5;
@@ -279,7 +279,7 @@ html, body {
 
 .fade {
   opacity: 0.0;
-  transition: opacity 2000ms;
+  transition: opacity 500ms;
 }
 
 .fade.in {

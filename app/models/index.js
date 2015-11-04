@@ -5,7 +5,7 @@ var path = require("path");
 if (process.env.DATABASE_URL) {
   var sequelize = new Sequelize(process.env.DATABASE_URL);
 } else {
-  var sequelize = new Sequelize('beginkit-master', 'beginkit-user', '', {
+  var sequelize = new Sequelize('phragm-master', 'phragm-user', '', {
     dialect: 'postgres'
   });
 }

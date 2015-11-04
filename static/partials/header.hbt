@@ -2,7 +2,7 @@
   <nav>
     <ul>
       <li class="brand"><a href="/#">
-  <img class="logo" src="/assets/images/power-button2.svg">beginkit</a></li>
+  <img class="logo" src="/assets/images/power-button2.svg">phragm</a></li>
     </ul>
     <ul>
      {{#each collections.pages}}
