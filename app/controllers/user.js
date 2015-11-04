@@ -46,8 +46,8 @@ module.exports = function (include) {
             var fullUrl = url.format({
               host: components.host,
               protocol: components.protocol,
-              slashes: components.slashes,
-              search: "activationKey=" + user.activationKey
+              hash: "#/activation?activationKey=" + user.activationKey,
+              slashes: components.slashes
             });
 
             emailer.queue('confirmation', {

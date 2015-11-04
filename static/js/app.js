@@ -1,6 +1,7 @@
 var crossroads = require('crossroads');
 var hasher = require('hasher');
 var User = require('./controllers/user');
+var Activation = require('./controllers/activation');
 
 function isFunction(functionToCheck) {
   var getType = {};
@@ -31,7 +32,8 @@ var App = {
     }
   },
   parseHash: function (newHash, oldHash) {
-    crossroads.parse(newHash);
+    newHash = newHash[newHash.length - 1] === "/" ? newHash.substring(0, newHash.length - 1) : newHash;
+    crossroads.parse(newHash, [oldHash]);
   },
   configuration: {},
   start: function () {
@@ -63,4 +65,5 @@ var App = {
   }
 };
 
+App.controller(Activation);
 App.controller(User);

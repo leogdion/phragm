@@ -10,5 +10,20 @@ var Querystring = (function () {
     }
     return str.join("&");
   }
-  return serialize;
+
+  function QueryStringToJSON(search) {
+    var pairs = search.slice(1).split('&');
+    pairs.forEach(function (pair) {
+      pair = pair.split('=');
+      result[pair[0]] = decodeURIComponent(pair[1] || '');
+    });
+
+    return JSON.parse(JSON.stringify(result));
+  }
+
+
+  return {
+    stringify: serialize,
+    parse: QueryStringToJSON
+  };
 })();

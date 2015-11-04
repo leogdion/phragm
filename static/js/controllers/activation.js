@@ -22,9 +22,11 @@ var Activation = (function () {
             baseElement = document;
           }
 
+          var args = Array.prototype.slice.call(arguments);
+          args[0] = baseElement;
           var element;
           if (typeof(selector) == "function") {
-            element = that.elements[name].selector.call(that, baseElement);
+            element = that.elements[name].selector.apply(that, args);
           }
 
           if (element) {
@@ -43,9 +45,10 @@ var Activation = (function () {
     initialize: function (app) {
       this.app = app;
       this.app.hash("activation{?query}", this);
-      self.elements.setup(this);
     },
-    hash: function (route, query) {
+    hash: function (route, oldRoute, query) {
+
+      self.elements.setup(this, query);
 
     },
     element: function (name, newElement) {
@@ -56,7 +59,15 @@ var Activation = (function () {
       }
     },
     elements: {
+      "form": {
+        "selector": function (document, data) {
+          var main = document.getElementsByTagName("main")[0];
+          var d = document.createElement('div');
+          main.innerHTML = templates.activation(data);
 
+          return main.firstChild;
+        }
+      }
     }
   };
 

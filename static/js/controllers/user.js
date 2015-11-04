@@ -124,7 +124,7 @@ var User = (function () {
       this.app.hash("", this);
       //self.elements.setup(this);
     },
-    hash: function (route) {
+    hash: function (route, oldRoute) {
       self.elements.setup(this);
     },
     element: function (name, newElement) {
@@ -163,7 +163,7 @@ var User = (function () {
                 for (i = 0, len = inputs.length; i < len; i++) {
                   inputs[i].disabled = false;
                 }
-                that.app.hash("activation?" + querystring(JSON.parse(resp)));
+                that.app.hash("activation?" + querystring.stringify(JSON.parse(resp)));
               } else {
                 for (i = 0, len = inputs.length; i < len; i++) {
                   inputs[i].disabled = false;

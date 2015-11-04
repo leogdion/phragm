@@ -1,6 +1,6 @@
 {
   "name": "phragm",
-  "version": "1.9.643",
+  "version": "1.9.654",
   "description": "template for s3 aws / heroku app",
   "main": "app/index.js",
   "scripts": {
