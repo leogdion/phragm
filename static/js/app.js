@@ -2,6 +2,7 @@ var crossroads = require('crossroads');
 var hasher = require('hasher');
 var User = require('./controllers/user');
 var Activation = require('./controllers/activation');
+var Dashboard = require('./controllers/dashboard');
 
 function isFunction(functionToCheck) {
   var getType = {};
@@ -65,5 +66,6 @@ var App = {
   }
 };
 
+App.controller(Dashboard);
 App.controller(Activation);
 App.controller(User);

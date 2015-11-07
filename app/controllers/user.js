@@ -46,10 +46,10 @@ module.exports = function (include) {
             var fullUrl = url.format({
               host: components.host,
               protocol: components.protocol,
-              hash: "#/activation?activationKey=" + user.activationKey,
+              hash: "#/activation?activationKey=" + user.activationKey + "&name=" + user.name,
               slashes: components.slashes
             });
-
+            console.log(fullUrl);
             emailer.queue('confirmation', {
               email: user.email,
               name: user.name,
@@ -69,6 +69,7 @@ module.exports = function (include) {
         },
         update: function (req, res) {
           User.activate(req.params.id, req.body.password, req.body.activationKey, function (err, user) {
+            // fix err feedback
             if (err) {
               return next(err);
             }

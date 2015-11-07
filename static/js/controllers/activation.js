@@ -80,6 +80,7 @@ var Activation = (function () {
               }
               return memo;
             }, {});
+            var that = this;
             var request = new XMLHttpRequest();
             request.open('PUT', this.app.configuration.server + '/api/v1/users/' + data.name, true);
             delete data.name;

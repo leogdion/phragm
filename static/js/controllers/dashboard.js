@@ -1,7 +1,7 @@
 var templates = require('../templates');
 var store = require("store");
 
-var Activation = (function () {
+var Dashboard = (function () {
   var constructor = function () {
 
   };
@@ -45,7 +45,7 @@ var Activation = (function () {
   constructor.prototype = {
     initialize: function (app) {
       this.app = app;
-      this.app.hash("activation{?query}", this);
+      this.app.hash("dashboard", this);
     },
     hash: function (route, oldRoute, query) {
 
@@ -63,8 +63,8 @@ var Activation = (function () {
       "form": {
         "selector": function (document, data) {
           var main = document.getElementsByTagName("main")[0];
-          var d = document.createElement('div');
-          main.innerHTML = templates.activation(data);
+
+          main.innerHTML = "<p>dashboard</p>";
 
           return main.firstChild;
         },
