@@ -1,0 +1,34 @@
+---
+layout: default.hbt
+---
+<div class="video-bg">
+  <section class="callout half">
+    <div>
+      <form id="user-registration">
+      <header>
+          <h1 id="title-header">phragm</h1>
+        <p>Pellentesque diam ex, auctor ut laoreet id, luctus vitae libero. Vestibulum pharetra est nulla, vitae tincidunt tortor ultricies vitae.</p>
+        </header>
+        <main>
+        <div>
+          <input name="name" type="text" placeholder="Name" minlength="3" maxlength="15" data-char="[a-zA-Z0-9-]" pattern="^[a-zA-Z0-9-]{5,15}$" data-char-transform="toLowerCase" data-error="The username must be at least 5 characters and can contain only letters, numbers, or a dash '-'." required>
+        </div>
+        <div>
+        <input name="password" type="password" placeholder="Password" data-char="[\S]" pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$" data-error="This password must contain one upper case, one lower case, one digit, and a punctuation mark and at least 8 characters." placeholder="Password" required>
+         </div>
+        <div>
+        <input name="confirm-password" type="password" placeholder="Confirm Password" data-equalTo="[name='password']" data-error="This must match the password." required data-ignore>
+         </div>
+        <div>
+        <input name="email" type="email" placeholder="Email Address" required>
+        </div>
+        </main>
+        <footer>
+        <button type="submit">Sign Up</button>
+        </footer>
+      </form>
+    </div>
+  </section>
+
+  
+</div>
