@@ -12,10 +12,10 @@
     <ul class="float-right"><li><a href="https://github.com/brightdigit/beginkit"><img src="/assets/images/GitHub-Mark-Light-32px.png"></a></li>
     <li><a href="https://www.brightdigit.com"><img src="/assets/images/bd-logo.svg"></a></li>
     </ul>
-    <form>
+    <form id="login">
        <input class="" name="name" type="text" placeholder="name" minlength="5" maxlength="15" required>
           <input class="" name="password" type="password" placeholder="password" minlength="8" maxlength="255" required>
-          <button>Log In</button>
+          <button type="submit">Log In</button>
     </form>
     <ul class="float-right">
       <li id="build" class="{{ stage }}">{{ pkg.version }}-{{ stage }}</li>
