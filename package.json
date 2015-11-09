@@ -24,9 +24,12 @@
     "pg": "^4.4.3",
     "pg-hstore": "^2.3.2",
     "sequelize": "^3.13.0",
-    "systemjs": "0.19.2"
+    "systemjs": "0.19.2",
+    "typescript": "^1.8.0-dev.20151109"
   },
   "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-typescript": "^2.9.2",
     "live-server": "^0.8.2",
     "typescript": "^1.6.2"
   }
