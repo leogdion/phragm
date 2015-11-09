@@ -6,6 +6,7 @@ var ts = require('gulp-typescript');
 var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 var gutil = require('gulp-util');
+var inlineNg2Template = require('gulp-inline-ng2-template');
 
 var tsProject = ts.createProject('tsconfig.json');
 
@@ -16,6 +17,7 @@ gulp.task('html', function () {
 gulp.task('ts', function () {
   var tsResult = gulp.src('client/js/**/*.ts')
         .pipe(sourcemaps.init()) 
+        .pipe(inlineNg2Template({ base: '/client/js' }))
         .pipe(ts(tsProject));
     
     return tsResult.js
