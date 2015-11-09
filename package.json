@@ -1,0 +1,33 @@
+{
+  "name": "phragm",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server/index.js",
+  "scripts": {
+    "tsc": "tsc -p client -w",
+    "start": "live-server --open=client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brightdigit/phragm.git"
+  },
+  "author": "BrightDigit, LLC",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brightdigit/phragm/issues"
+  },
+  "homepage": "https://github.com/brightdigit/phragm#readme",
+  "dependencies": {
+    "angular2": "2.0.0-alpha.44",
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "pg": "^4.4.3",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.13.0",
+    "systemjs": "0.19.2"
+  },
+  "devDependencies": {
+    "live-server": "^0.8.2",
+    "typescript": "^1.6.2"
+  }
+}
