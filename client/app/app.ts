@@ -1,3 +1,6 @@
+import 'zone.js';
+import 'reflect-metadata';
+
 import {Component, bootstrap} from 'angular2/angular2';
 @Component({
     selector: 'my-app',
