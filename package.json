@@ -33,12 +33,12 @@
     "systemjs": "0.19.2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "zone.js": "^0.5.8"
+    "zone.js": "^0.5.8",
+    "typescript": "^1.6.2"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-typescript": "^2.9.2",
-    "live-server": "^0.8.2",
-    "typescript": "^1.6.2"
+    "live-server": "^0.8.2"
   }
 }

@@ -1,4 +1,3 @@
-
 var browserify = require('browserify');
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
@@ -10,6 +9,10 @@ var gutil = require('gulp-util');
 
 var tsProject = ts.createProject('tsconfig.json');
 
+gulp.task('html', function () {
+  return gulp.src('client/**/*.html').pipe(gulp.dest('build/dev'));
+});
+
 gulp.task('ts', function () {
   var tsResult = gulp.src('client/app/**/*.ts')
         .pipe(sourcemaps.init()) 
@@ -18,13 +21,13 @@ gulp.task('ts', function () {
     return tsResult.js
                 .pipe(concat('main.js')) // You can use other plugins that also support gulp-sourcemaps 
                 .pipe(sourcemaps.write()) // Now the sourcemaps are added to the .js file 
-                .pipe(gulp.dest('build/dev'));
+                .pipe(gulp.dest('.tmp/build/js'));
 });
 
 gulp.task('javascript', ['ts'], function () {
   // set up the browserify instance on a task basis
   var b = browserify({
-    entries: './build/dev/main.js',
+    entries: './.tmp/build/js/main.js',
     debug: true
   });
 
@@ -36,7 +39,7 @@ gulp.task('javascript', ['ts'], function () {
         //.pipe(uglify())
         .on('error', gutil.log)
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('./dist/js/'));
+    .pipe(gulp.dest('./build/dev/js/'));
 });
 
-gulp.task('default', ['javascript']);
+gulp.task('default', ['html','javascript']);
