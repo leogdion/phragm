@@ -7,14 +7,35 @@ var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 var gutil = require('gulp-util');
 var inlineNg2Template = require('gulp-inline-ng2-template');
+var del = require('del');
+var gls = require('gulp-live-server');
 
-var tsProject = ts.createProject('tsconfig.json');
-
-gulp.task('html', function () {
-  return gulp.src('client/**/*.html').pipe(gulp.dest('build/dev'));
+gulp.task('clean', function () {
+  return del([
+    'build/**/*',
+    // here we use a globbing pattern to match everything inside the `mobile` folder
+    '.tmp/**/*'
+  ]);
 });
 
-gulp.task('ts', function () {
+gulp.task('html-client', ['clean'], function () {
+  return gulp.src('client/**/*.html').pipe(gulp.dest('build/dev/client'));
+});
+
+gulp.task('ts-server', ['clean'], function () {
+var tsProject = ts.createProject('tsconfig.json');
+  var tsResult = gulp.src('server/**/*.ts')
+        .pipe(sourcemaps.init()) 
+        .pipe(ts(tsProject));
+    
+    return tsResult.js
+                //.pipe(concat('index.js')) // You can use other plugins that also support gulp-sourcemaps 
+                .pipe(sourcemaps.write()) // Now the sourcemaps are added to the .js file 
+                .pipe(gulp.dest('build/dev/server'));
+});
+
+gulp.task('ts-client', ['clean'], function () {
+var tsProject = ts.createProject('tsconfig.json');
   var tsResult = gulp.src('client/js/**/*.ts')
         .pipe(sourcemaps.init()) 
         .pipe(inlineNg2Template({ base: '/client/js' }))
@@ -23,13 +44,13 @@ gulp.task('ts', function () {
     return tsResult.js
                 //.pipe(concat('index.js')) // You can use other plugins that also support gulp-sourcemaps 
                 .pipe(sourcemaps.write()) // Now the sourcemaps are added to the .js file 
-                .pipe(gulp.dest('.tmp/build/js'));
+                .pipe(gulp.dest('.tmp/build/client/js'));
 });
 
-gulp.task('javascript', ['ts'], function () {
+gulp.task('javascript-client', ['ts-client', 'clean'], function () {
   // set up the browserify instance on a task basis
   var b = browserify({
-    entries: './.tmp/build/js/index.js',
+    entries: './.tmp/build/client/js/index.js',
     debug: true
   });
 
@@ -41,7 +62,12 @@ gulp.task('javascript', ['ts'], function () {
         //.pipe(uglify())
         .on('error', gutil.log)
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('./build/dev/js/'));
+    .pipe(gulp.dest('./build/dev/client/js/'));
 });
 
-gulp.task('default', ['html','javascript']);
+gulp.task('server-start', ['ts-server'], function () {
+  var server = gls.new('build/dev/server');
+    server.start(); 
+});
+
+gulp.task('default', ['html-client','javascript-client','ts-server']);
