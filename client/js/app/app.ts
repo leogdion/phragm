@@ -1,9 +1,10 @@
-import {View, Component} from 'angular2/angular2';
+import {View, Component, FORM_DIRECTIVES} from 'angular2/angular2';
 
 @Component({
   selector: 'phragm-app'
 })
 @View({
+  directives: [FORM_DIRECTIVES],
   templateUrl: 'app/app.html'
 })
 /*
@@ -15,4 +16,7 @@ import {View, Component} from 'angular2/angular2';
 ])
 */
 export class App {
+  onSubmit(value) {  
+    console.log('you submitted value: ', value);  
+  }
 }

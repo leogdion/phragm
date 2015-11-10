@@ -81,14 +81,15 @@ gulp.task('dev:serve', ['dev'], function () {
 var gls = require('gulp-live-server');
   var server = gls.new('build/dev/server');
   server.start(); 
-var fileServer = new staticServer.Server('build/dev/client');
+  
+  var fileServer = new staticServer.Server('build/dev/client');
 
   console.log("[node-static] listening on 8080 ...")
-require('http').createServer(function (request, response) {
-    request.addListener('end', function () {
-        fileServer.serve(request, response);
-    }).resume();
-}).listen(8080);
+  require('http').createServer(function (request, response) {
+      request.addListener('end', function () {
+          fileServer.serve(request, response);
+      }).resume();
+  }).listen(8080);
 });
 
 gulp.task('default', ['dev']);
