@@ -18,11 +18,11 @@ gulp.task('clean', function () {
   ]);
 });
 
-gulp.task('html-client', ['clean'], function () {
+gulp.task('dev:client:html:copy', ['clean'], function () {
   return gulp.src('client/**/*.html').pipe(gulp.dest('build/dev/client'));
 });
 
-gulp.task('ts-server', ['clean'], function () {
+gulp.task('dev:server:js:ts', ['clean'], function () {
 var tsProject = ts.createProject('tsconfig.json');
   var tsResult = gulp.src('server/**/*.ts')
         .pipe(sourcemaps.init()) 
@@ -34,7 +34,7 @@ var tsProject = ts.createProject('tsconfig.json');
                 .pipe(gulp.dest('build/dev/server'));
 });
 
-gulp.task('ts-client', ['clean'], function () {
+gulp.task('dev:client:js:ts', ['clean'], function () {
 var tsProject = ts.createProject('tsconfig.json');
   var tsResult = gulp.src('client/js/**/*.ts')
         .pipe(sourcemaps.init()) 
@@ -47,7 +47,7 @@ var tsProject = ts.createProject('tsconfig.json');
                 .pipe(gulp.dest('.tmp/build/client/js'));
 });
 
-gulp.task('javascript-client', ['ts-client', 'clean'], function () {
+gulp.task('dev:client:js:browserify', ['dev:client:js:ts', 'clean'], function () {
   // set up the browserify instance on a task basis
   var b = browserify({
     entries: './.tmp/build/client/js/index.js',
@@ -65,7 +65,19 @@ gulp.task('javascript-client', ['ts-client', 'clean'], function () {
     .pipe(gulp.dest('./build/dev/client/js/'));
 });
 
-gulp.task('server-start', ['ts-server', 'javascript-client', 'html-client'], function () {
+gulp.task('dev:client:html', ['dev:client:html:copy']);
+
+gulp.task('dev:client:js', ['dev:client:js:browserify', 'dev:client:js:ts']);
+
+gulp.task('dev:client', ['dev:client:js', 'dev:client:html']);
+
+gulp.task('dev:server:js', ['dev:server:js:ts']);
+
+gulp.task('dev:server', ['dev:server:js']);
+
+gulp.task('dev', ['dev:client', 'dev:server']);
+
+gulp.task('dev:serve', ['dev'], function () {
 var gls = require('gulp-live-server');
   var server = gls.new('build/dev/server');
   server.start(); 
@@ -79,4 +91,4 @@ require('http').createServer(function (request, response) {
 }).listen(8080);
 });
 
-gulp.task('default', ['html-client','javascript-client','ts-server']);
+gulp.task('default', ['dev']);
