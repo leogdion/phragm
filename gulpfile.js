@@ -8,7 +8,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var gutil = require('gulp-util');
 var inlineNg2Template = require('gulp-inline-ng2-template');
 var del = require('del');
-var gls = require('gulp-live-server');
+var staticServer = require('node-static');
 
 gulp.task('clean', function () {
   return del([
@@ -65,9 +65,18 @@ gulp.task('javascript-client', ['ts-client', 'clean'], function () {
     .pipe(gulp.dest('./build/dev/client/js/'));
 });
 
-gulp.task('server-start', ['ts-server'], function () {
+gulp.task('server-start', ['ts-server', 'javascript-client', 'html-client'], function () {
+var gls = require('gulp-live-server');
   var server = gls.new('build/dev/server');
-    server.start(); 
+  server.start(); 
+var fileServer = new staticServer.Server('build/dev/client');
+
+  console.log("[node-static] listening on 8080 ...")
+require('http').createServer(function (request, response) {
+    request.addListener('end', function () {
+        fileServer.serve(request, response);
+    }).resume();
+}).listen(8080);
 });
 
 gulp.task('default', ['html-client','javascript-client','ts-server']);
