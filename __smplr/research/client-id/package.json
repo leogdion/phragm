@@ -9,7 +9,7 @@
   "author": "",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "express": "~3.4.1",
+    "express": "~4.17.1",
     "sequelize": "~2.0.0-beta.0",
     "sqlite3": "~2.1.17",
     "async": "~0.2.9",
