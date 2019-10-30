@@ -34,7 +34,7 @@
     "grunt-contrib-nodeunit": "~0.2.1",
     "grunt-jsbeautifier": "~0.2.2",
     "grunt-apidoc": "~0.2.0",
-    "bower": "~1.2.7",
+    "bower": "~1.8.8",
     "grunt-bower-requirejs": "~0.7.1",
     "grunt-contrib-requirejs": "~0.4.1",
     "grunt-bower-task": "~0.3.2",
