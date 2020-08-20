@@ -22,7 +22,7 @@
     "mysql": "~2.0.1",
     "winston": "~0.7.2",
     "deepmerge": "~0.2.7",
-    "bcrypt": "~0.7.7",
+    "bcrypt": "~5.0.0",
     "sequelize": "~2.0.0-dev4",
     "grunt": "~0.4.1",
     "nodeunit": "~0.8.1",
